@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata:
+metadata: 
   name: frontend-deployment
-  namespace: chat-app
+  namespace: fullstack-chatapp
 spec:
   replicas: 1
   selector:
@@ -11,19 +11,14 @@ spec:
   template:
     metadata:
       name: frontend-pod
-      namespace: chat-app
-      labels: 
-        app: frontend
+      labels:
+        app: frontend 
     spec:
       containers:
-      - name: chatapp-frontend
-        image: trainwithshubham/chatapp-frontend
-        ports:
-        - containerPort: 80
-        env:
-        - name: NODE_ENV
-          value: production
-          
-
-
-
+        - name: frontend-cont
+          image: roshan03ish/chatapp-frontend:latest
+          ports:
+            - containerPort: 80
+          env:   # ✅ must be indented to align with ports
+            - name: NODE_ENV
+              value: "production"

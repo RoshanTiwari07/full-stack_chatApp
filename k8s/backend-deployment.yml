@@ -2,33 +2,44 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
-  namespace: chat-app
+  namespace: fullstack-chatapp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: backend-service
   template:
     metadata:
-      name: backend-pod
-      namespace: chat-app
-      labels: 
-        app: backend
+      labels:
+        app: backend-service
     spec:
       containers:
-      - name: chatapp-backend
-        image: trainwithshubham/chatapp-backend:latest
+      - name: backend-cont
+        image: 'roshan03ish/chatapp-backend:latest'
         ports:
         - containerPort: 5001
         env:
+        # ✅ moved inside the container
         - name: NODE_ENV
           value: production
+        - name: MONGO_URL
+          value: "mongodb://mongoadmin:secret@mongodb:27017/chatapp?authSource=admin"
         - name: MONGODB_URI
-          value: "mongodb://mongoadmin:secret@mongodb:27017/dbname?authSource=admin"
-        - name: JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: chatapp-secrets
-              key: jwt 
+          value: "mongodb://mongoadmin:secret@mongodb:27017/chatapp?authSource=admin"
         - name: PORT
           value: "5001"
+        - name: JWT_SECRET
+          value: "your-jwt-secret-key"
+        - name: CLOUDINARY_CLOUD_NAME
+          value: ""
+        - name: CLOUDINARY_API_KEY
+          value: ""
+        - name: CLOUDINARY_API_SECRET
+          value: ""
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
