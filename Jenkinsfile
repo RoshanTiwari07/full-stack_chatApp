@@ -85,16 +85,20 @@ pipeline{
         stage("Docker: Build"){
             steps{
                 script {
-                    docker_build("roshan03ish/chatapp-frontend:${params.FRONTEND_DOCKERTAG}","./frontend")
-                    docker_build("roshan03ish/chatapp-backend:${params.BACKEND_DOCKERTAG}","./backend")
+                    dir('backend'){
+                            docker_build("chatapp-backend","${params.BACKEND_DOCKERTAG}","roshan03ish")
+                    }
+                    dir('frontend'){
+                            docker_build("chatapp-frontend","${params.FRONTEND_DOCKERTAG}","roshan03ish")
+                    }
                 }
             }
         }
         stage("Docker: Push"){
             steps{
                 script {
-                    docker_push("roshan03ish/chatapp-frontend:${params.FRONTEND_DOCKERTAG}")
-                    docker_push("roshan03ish/chatapp-backend:${params.BACKEND_DOCKERTAG}")
+                    docker_push("chatapp-backend","${params.BACKEND_DOCKERTAG}","roshan03ish")
+                    docker_push("chatapp-frontend","${params.FRONTEND_DOCKERTAG}","roshan03ish")
                 }
             }
         }
